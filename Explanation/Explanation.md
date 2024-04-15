@@ -1,4 +1,4 @@
-# [2](https://www.youtube.com/watch?v=gBfkX9H3szQ&list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&index=2&t=167s&pp=iAQB)
+# [Video 2](https://www.youtube.com/watch?v=gBfkX9H3szQ&list=PLeLN0qH0-mCVQKZ8-W1LhxDcVlWtTALCS&index=2&t=167s&pp=iAQB)
 
 * __/requirements.txt__ (write whole requirements)
 
@@ -23,6 +23,7 @@
   app = FastAPI()
   ```
 
+* `$ git init`
 * `PS C:\...\2_PetProject_FastAPI>` `uvicorn main:app --reload`
   `INFO: 127.0.0.1:8000 - "GET / HTTP/1.1" 404 Not Found`
   `Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)`
@@ -49,3 +50,32 @@
   ```txt
   1| "Hello world"
   ```
+
+* __main.py__
+  * rewrite an endpoint
+
+  ```py
+  @app.get("/tasks")
+  def get_tasks():
+  task = Task(name="Write the video", description="for the manager")
+  return {"data": task}
+  ```
+
+* <http://127.0.0.1:8000/tasks>
+
+  ```txt
+  {
+    "data": {
+        "name": "Write the video",
+        "description": "for the manager"
+    }
+  } 
+  ```
+
+* <http://127.0.0.1:8000/docs>
+  * press __Try it out__
+    ![FastApiTry](./ExpImages/FastApiTry.png)
+  * press __Execute__
+    ![FastApiExecute](./ExpImages/FastApiExecute.png)
+  * get as result
+    ![FastApeResponse](./ExpImages/FastApiResponse.png)
