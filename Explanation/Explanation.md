@@ -255,11 +255,10 @@
 
 * commit 08d9340 19:40 launch uvicorn web server, drop old tables of the database and create a new table
 
-* Task: make the requests to the database
-  * create __repository.py__ for requests (decomposition of project logic)
-    * there is a simple repository without
-      * instances of repository
-      * [Unit of Work Pattern](https://www.youtube.com/watch?v=TaYg23VkCRI)
+* create __repository.py__ for requests (decomposition of project logic)
+  * there is a simple repository without
+    * instances of repository
+    * [Unit of Work Pattern](https://www.youtube.com/watch?v=TaYg23VkCRI)
 
     ```py
       # repository.py
@@ -271,4 +270,8 @@
         ...
     ```
 
-* commit
+* commit bf34c9b 25:50 init repository.py
+
+* replacement of code snippets from __main.py__
+  * `class STaskAdd(BaseModel)` and `class STask(STaskAdd)` to __schemas.py__
+  * `@app.post("/tasks")` and `# @app.get("/tasks")` to __router.py__
