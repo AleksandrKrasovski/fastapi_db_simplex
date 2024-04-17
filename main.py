@@ -19,7 +19,6 @@ tasks = []
 @app.post("/tasks")
 async def add_task(
         task: Annotated[STaskAdd, Depends()],
-
 ):
     tasks.append(task)
     return {"ok": True}

@@ -86,8 +86,8 @@
   ```py
   @app.get("/tasks")
   def get_tasks():
-  task = Task(name="Write the video", description="for the manager")
-  return {"data": task}
+    task = Task(name="Write the video", description="for the manager")
+    return {"data": task}
   ```
 
 * <http://127.0.0.1:8000/tasks>
@@ -102,30 +102,69 @@
   ```
 
 * <http://127.0.0.1:8000/docs> (__GET__ request)
-  * press __Try it out__
+  * a view
     ![GetTry](./ExpImages/GetTry.png)
-  * press __Execute__
+  * press __Try it out__
     ![GetExecute](./ExpImages/GetExecute.png)
-  * get as result
+  * press __Execute__ and get as result
     ![GetResponse](./ExpImages/GetResponse.png)
 * __main.py__
   * __STaskAdd__(BaseModel) class where __S - Scheme__
   * STask(__STaskAdd__) class
   * __\@app.post("/tasks")__ endpoint
+
+  ```py
+  @app.post("/tasks")
+  async def add_task(
+    task: STaskAdd,
+  ):
+    tasks.append(task)
+    return {"ok": True}
+  ```
+
 * <http://127.0.0.1:8000/docs#/default/add_task_tasks_post> (__POST__ request)
-  * press __Try it out__
+  * a view
     ![PostTry](./ExpImages/PostTry.png)
-  * press __Execute__
+  * press __Try it out__
     ![PostExecute](./ExpImages/PostExecute.png)
-    * __name__ and __description__ fieldes can be changed
-  * get as result
-    ![]
-* !!!comeback here later
+    * __name__ and __description__ fieldes should be changed in __json__ format
+
+      ```json
+      {
+        "name": "Write the video",
+        "description": "for the manager"
+      }
+      ```
+
+* commit 42400dc 10:30 main.py 21 string: task: STaskAdd
+* __main.py__
+  
+  ```py
+  ...
+  from fastapi import Depends
+  from typing import Annotated
+  ...
+  @app.post("/tasks")
+  async def add_task(
+    task: Annotated[STaskAdd, Depends()],
+  ):
+    tasks.append(task)
+    return {"ok": True}
+  ```
+
+* <http://127.0.0.1:8000/docs#/default/add_task_tasks_post> (__POST__ request)
+  * a view
+    ![PostTryDepends](./ExpImages/PostTryDepends.png)
+  * press __Try it out__ and fill the __name__ and __description__ fields in __txt__ format
+    ![PostExecuteDepends](./ExpImages/PostExecuteDepends.png)
+  * press __Execute__ and get as result
+    ![PostResponseDepends](./ExpImages/PostResponseDepends.png)
+* commit 2229790 10:40 main.py 21 string: task: Annotated[STaskAdd, Depends()]
 * __database.py__
   * import and create __async engine__ for requests to the database
     * sqlite address (URL - Uniform Resource Locator)
     * aiosqlite driver
-    * tasks.bd
+    * database should be located anywhere on any server or cloud but in the project this is __tasks.bd__
 
     ```py
     from sqlalchemy.ext.asyncio import create_async_engine
