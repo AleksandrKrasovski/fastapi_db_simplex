@@ -186,10 +186,12 @@
   * __DeclarativeBase__
     * from sqlalchemy.orm import DeclarativeBase
     * class Model(DeclarativeBase)
-  * __class TaskOrm(Model)__ (description of table)
+  * description of ORM-table in __class TaskOrm(Model)__
     * [sqlalchemy orm](https://docs.sqlalchemy.org/en/20/orm/quickstart.html)
       * a table is a collection of related data held in a structured format within a database; it consists of rows and columns.
       * an __ORM - Object-Relational Mappin__ is a scheme refers to a technique that allows you to interact with your database using the object-oriented paradigm of your programming language.
     * from sqlalchemy.orm import Mapped, mapped_column
     * __primary_key__ (must be)
-    1525
+  * commit 1fc38ac 15:25 add explanation for main.py 21 string, give ORM-table description in database.py
+  * functions __create_tables()__ (eccording to the author, look it somewhere in docs) and __delete_tables()__
+  * .
