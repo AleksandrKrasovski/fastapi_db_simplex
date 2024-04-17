@@ -253,5 +253,22 @@
 
     Task: ok
 
-* 
-* Task:
+* commit 08d9340 19:40 launch uvicorn web server, drop old tables of the database and create a new table
+
+* Task: make the requests to the database
+  * create __repository.py__ for requests (decomposition of project logic)
+    * there is a simple repository without
+      * instances of repository
+      * [Unit of Work Pattern](https://www.youtube.com/watch?v=TaYg23VkCRI)
+
+    ```py
+      # repository.py
+      ...
+      class TaskRepository:
+        @classmethod
+        ...
+        @classmethod
+        ...
+    ```
+
+* commit
