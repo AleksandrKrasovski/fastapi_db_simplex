@@ -416,8 +416,172 @@
   * fast and simple example of Docker
   * __Dockerfile__
   * a new terminal named for example docker.
-  * `$ pip freeze > requirements.txt`
+
+    ```powershell
+      PS C:\...\2_PetProject_FastAPI> .venv\Scripts\activate
+      (.venv) PS C:\...\2_PetProject_FastAPI> pip freeze > requirements.txt
+      (.venv) PS C:\...\2_PetProject_FastAPI>
+    ```
+
     * __requirements.txt__ added and formatted
   * __.dockerignore__
 
-* GitHub
+* commit fac9f37 Docker 37:10
+
+* __GitHub__
+  * `https://github.com/dashboard`
+    * press __New__ button
+      * write __Repository name__
+      * __Public__ radio-button
+      * press __Create repository__ button
+        * copy whole code snippet under
+        __…or create a new repository on the command line__
+
+  * VS Code terminal of project
+    * insert
+
+      ```bash
+        echo "# pky" >> README.md
+        git init
+        git add README.md
+        git commit -m "first commit"
+        git branch -M main
+        git remote add origin <git@github.com>:AleksandrKrasovski/pky.git
+        git push -u origin main
+      ```
+
+        !!! note
+            - `git init` may be omitted if the project is already under git-control
+            - the commit inside `git commit -m "first commit"` may be customized by the same reason
+
+  * delete repository if it is needed
+    * <https://docs.github.com/en/repositories/creating-and-managing-repositories/deleting-a-repository>
+
+* commit 5ef464e github repository named fastapi_db_simplex 39:00
+
+* Selectel Claud server
+  * <https://my.selectel.ru/vpc/aee65b97490f4e668635258e28b637fc/servers?region=ru-9>
+    ![SelectelServer](./ExpImages/SelectelServer.png)
+  * IP 31.129.57.80
+
+* connection to serser
+  ![server Login Password](./ExpImages/serverLoginPassword.png)
+  
+  ```bash
+  # terminal
+    C:\...>ssh root@31.129.57.80
+    ..
+    yes
+    ..
+    root>@31.129.57.80's password:
+    Welcome to Ubuntu 22.04.4 LTS (GNU/Linux 5.15.0-102-generic x86_64)
+    ..
+    root@lora:~# clear
+  ```
+
+  !!! note
+      the password is not inserted explicitly
+
+* install Git on the claud server
+  
+  ```bash
+  # terminal
+    root@lora:~# sudo apt-get update 
+    ..
+    root@lora:~# sudo apt-get install git
+  ```
+  
+* install Docker on the claud server from the [source](https://docs.docker.com/engine/install/ubuntu/#:~:text=Set%20up%20Docker%27s,repository.)  
+
+  * terminal
+
+    ```bash  
+      root@lora:~# # Add Docker's official GPG key
+      sudo apt-get update
+      sudo apt-get install ca-certificates curl
+      sudo install -m 0755 -d /etc/apt/keyrings
+      sudo curl -fsSL <https://download.docker.com/linux/ubuntu/gpg> -o /etc/apt/keyrings/docker.asc
+      sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+      # Add the repository to Apt sources
+      echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+        $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+        sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      sudo apt-get update
+    ```
+
+    ```bash
+      root@lora:~# sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+      ..
+      root@lora:~# clear
+    ```
+
+    ```bash
+      root@lora:~# git
+      ..
+      These are common Git commands used in various situations:
+      ..
+      root@lora:~# clear
+    ```
+
+    ```bash
+      root@lora:~# docker
+
+      Usage:  docker [OPTIONS] COMMAND
+      ..
+      root@lora:~# clear
+    ```
+
+    !!! note
+        - <https://github.com/AleksandrKrasovski/fastapi_db_simplex>
+          - Code / Local Clone / HTTPS / __copy__
+            - <https://github.com/AleksandrKrasovski/fastapi_db_simplex.git>
+
+    ```bash
+      root@lora:~# git clone https://github.com/AleksandrKrasovski/fastapi_db_simplex.git
+      Cloning into 'fastapi_db_simplex'..
+      ..
+      Resolving deltas: 100% .. done.
+    ```
+
+    ```bash
+      root@lora:~# ls
+      fastapi_db_simplex
+
+      root@lora:~# cd fastapi_db_simplex
+      root@lora:~/fastapi_db_simplex#
+
+      root@lora:~/fastapi_db_simplex# ls
+      Dockerfile   README.md    database.py  repository.py     router.py   tasks.bd
+      Explanation  __pycache__  main.py      requirements.txt  schemas.py
+    ```
+
+* launch docker
+  
+  ```bash
+    root@lora:~/fastapi_db_simplex# docker build . --tag fastapi__app && docker run -p 80:80 fastapi__app
+  ```
+  
+  ```bash
+    0 fastapi__app
+    [+] Building 1.7s (2/2) FINISHED                                        docker:default
+     => [internal] load build definition from Dockerfile                              0.4s
+     => => transferring dockerfile: 174B                                              0.0s
+     => ERROR [internal] load metadata for docker.io/library/python:3.11-slim_        1.0s
+
+    ------
+     > [internal] load metadata for docker.io/library/python:3.11-slim_:
+    ------
+
+    Dockerfile:1
+    --------------------
+
+    1 | >>> FROM python:3.11-slim_
+       2 |
+       3 |     COPY .
+    --------------------
+
+    ERROR: failed to solve: python:3.11-slim_: failed to resolve source metadata for docker.io/library/python:3.11-slim_: docker.io/library/python:3.11-slim_: not found
+    root@lora:~/fastapi_db_simplex#
+  ```
