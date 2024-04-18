@@ -281,7 +281,7 @@
 
 * commit fb5903f 27:20 replacement of code snippets from main.py to schemas.py and router.py
 
-* __router.py__
+* Task: include the router, test GET and POST requests
   * change
 
     ```py
@@ -328,14 +328,83 @@
   * `http://127.0.0.1:8000/docs#/default/add_task_tasks_post`
     * `No operations defined in spec!`
 
-* __main.py__
-  
-  ```py
-  # main.py
-    ...
-    from router import router as task_router
-    ...
-    app.include_router(task_router)    
-  ```
+  * include_router()
 
-* 29.45
+    ```py
+    # main.py
+      ...
+      from router import router as task_router
+      ...
+      app.include_router(task_router)    
+    ```
+
+* commit 0130d95 include_router, its tag, test GET and POST 29:40
+
+* Task: Typing of GET and POST requests
+  * Data Typing is important for frontend
+    * GET
+      * <http://127.0.0.1:8000/docs/...> 
+        Response body type: object, Example Value Schema type: string
+          ![GetExampleValue](./ExpImages/GetExampleValue.png)
+
+      * include typing of class STask (see schemas.py)
+
+        ```py
+        # router.py
+          ...
+          @router.get("")
+            async def get_tasks() -> STask:
+            ...
+        ```
+
+      * convert objects of database to pydentic schemas
+
+        ```py
+        # repository.py
+          ...
+          @classmethod
+          async def find_all(cls) -> list[STask]:
+            async with new_session() as session:
+              ...
+              task_schemas = [STask.model_validate(task_model) for task_model in task_models]
+              # return task_models
+              return task_schemas
+        ```
+
+        ```py
+        # router.py
+          @router.get("")
+          async def get_tasks() -> list[STask]:
+            ...
+        ```
+
+      * <http://127.0.0.1:8000/docs/...>
+        ![GetExampleValueTyping](./ExpImages/GetExampleValueTyping.png)
+
+    * POST
+      * <http://127.0.0.1:8000/docs/...> Example Value Schema type: string
+        ![PostExampleValue](./ExpImages/PostExampleValue.png)
+
+      * class STaskId()
+
+        ```py
+        # schemas.py
+          class STaskId(BaseModel):
+              ok: bool = True
+              id: int
+        ```
+
+      * STaskId type in post request
+
+        ```py
+        # router.py
+          ...
+          @router.post("")
+          async def add_task(
+              task: Annotated[STaskAdd, Depends()],
+          ) -> STaskId:
+          ...
+        ```
+
+      * <http://127.0.0.1:8000/docs/...>
+        ![PostExampleValueTyping](./ExpImages/PostExampleValueTyping.png)
