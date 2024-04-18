@@ -343,7 +343,7 @@
 * Task: Typing of GET and POST requests
   * Data Typing is important for frontend
     * GET
-      * <http://127.0.0.1:8000/docs/...> 
+      * <http://127.0.0.1:8000/docs/...>
         Response body type: object, Example Value Schema type: string
           ![GetExampleValue](./ExpImages/GetExampleValue.png)
 
@@ -408,3 +408,16 @@
 
       * <http://127.0.0.1:8000/docs/...>
         ![PostExampleValueTyping](./ExpImages/PostExampleValueTyping.png)
+
+* commit a0fea41 Typing of GET and POST requests 34:22
+
+* __Docker__
+  * It is a containerization (boxing) tool
+  * fast and simple example of Docker
+  * __Dockerfile__
+  * a new terminal named for example docker.
+  * `$ pip freeze > requirements.txt`
+    * __requirements.txt__ added and formatted
+  * __.dockerignore__
+
+* GitHub
