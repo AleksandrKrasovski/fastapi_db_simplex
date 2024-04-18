@@ -37,9 +37,10 @@
 * create __app__, an instance of __FastAPI__ class
 
   ```py
-  from fastapi import FastAPI
-    
-  app = FastAPI()
+  # main.py
+    from fastapi import FastAPI
+      
+    app = FastAPI()
   ```
 
 * git
@@ -47,10 +48,7 @@
   * __.gitignore__
 
     ```txt
-    # frontend
       node_modules
-
-    # backend
       .venv
     ```
 
@@ -70,10 +68,11 @@
 * create get request
   * write an endpoint
 
-    ```py main.py
-    @app.get("/home")
-    def get_home():
-      return "Hello world"
+    ```py
+    # main.py
+      @app.get("/home")
+      def get_home():
+        return "Hello world"
     ```
 
   * <http://127.0.0.1:8000/home>
@@ -85,10 +84,11 @@
   * rewrite the endpoint
 
     ```py
-    @app.get("/tasks")
-    def get_tasks():
-      task = Task(name="Write the video", description="for the manager")
-      return {"data": task}
+    # main.py
+      @app.get("/tasks")
+      def get_tasks():
+        task = Task(name="Write the video", description="for the manager")
+        return {"data": task}
     ```
 
   * <http://127.0.0.1:8000/tasks>
@@ -148,16 +148,17 @@
   * __main.py__
 
     ```py
-    ...
-    from fastapi import Depends
-    from typing import Annotated
-    ...
-    @app.post("/tasks")
-    async def add_task(
-      task: Annotated[STaskAdd, Depends()],
-    ):
-      tasks.append(task)
-      return {"ok": True}
+    # main.py
+      ...
+      from fastapi import Depends
+      from typing import Annotated
+      ...
+      @app.post("/tasks")
+      async def add_task(
+        task: Annotated[STaskAdd, Depends()],
+      ):
+        tasks.append(task)
+        return {"ok": True}
     ```
 
   * <http://127.0.0.1:8000/docs#/default/add_task_tasks_post> (__POST__ request)
@@ -178,19 +179,21 @@
       * database should be located anywhere on any server or cloud but in the project this is __tasks.bd__
 
       ```py
-      from sqlalchemy.ext.asyncio import create_async_engine
+      # database.py
+        from sqlalchemy.ext.asyncio import create_async_engine
 
-      engine = create_async_engine(
-        "sqlite+aiosqlite:///tasks.bd"
-      )
+        engine = create_async_engine(
+          "sqlite+aiosqlite:///tasks.bd"
+        )
       ```
 
     * import __Async Session Maker__
 
       ```py
-      from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-      ...
-      new_session = async_sessionmaker(engine, expire_on_commit=False)
+      # database.py
+        from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+        ...
+        new_session = async_sessionmaker(engine, expire_on_commit=False)
       ```
 
       * __expire_on_commit=False__ for homework  
@@ -215,21 +218,21 @@
 
      ```py
       # main.py:
-      ...
-      from contextlib import asynccontextmanager
+        ...
+        from contextlib import asynccontextmanager
 
-      @asynccontextmanager
+        @asynccontextmanager
 
-      async def lifespan(app: FastAPI):
-          await delete_tables()
-          print("DATABASE is cleared")
-          await create_tables()
-          print("DATABASE is ready")
-          yield
-          print("DATABASE turning off")
+        async def lifespan(app: FastAPI):
+            await delete_tables()
+            print("DATABASE is cleared")
+            await create_tables()
+            print("DATABASE is ready")
+            yield
+            print("DATABASE turning off")
 
-      app = FastAPI(lifespan=lifespan)
-      ...
+        app = FastAPI(lifespan=lifespan)
+        ...
     ```
 
     * make any change (for example, gap) anywhere in __main.py__ and comeback
@@ -275,3 +278,64 @@
 * replacement of code snippets from __main.py__
   * `class STaskAdd(BaseModel)` and `class STask(STaskAdd)` to __schemas.py__
   * `@app.post("/tasks")` and `# @app.get("/tasks")` to __router.py__
+
+* commit fb5903f 27:20 replacement of code snippets from main.py to schemas.py and router.py
+
+* __router.py__
+  * change
+
+    ```py
+    # router.py
+      ...
+      router = APIRouter(
+        prefix="/tasks",
+      )
+      ...
+    ```
+
+  * replace
+
+    ```py
+    # router.py
+      ...
+      @router.post("")
+      ...
+        tasks.append(task)
+        ...
+
+      @router.get("")
+      def get_tasks():
+        task = Task(name="Write the video", description="for the manager")
+        return {"data": task}
+    ```
+
+    by
+
+    ```py
+    # router.py
+      ...
+      @router.post("")
+      ...
+        task_id = await TaskRepository.add_one(task)
+        ...
+
+      @router.get("")
+      async def get_tasks():
+        tasks = await TaskRepository.find_all()
+        return {"data": tasks}
+    ```
+
+  * `http://127.0.0.1:8000/docs#/default/add_task_tasks_post`
+    * `No operations defined in spec!`
+
+* __main.py__
+  
+  ```py
+  # main.py
+    ...
+    from router import router as task_router
+    ...
+    app.include_router(task_router)    
+  ```
+
+* 29.45

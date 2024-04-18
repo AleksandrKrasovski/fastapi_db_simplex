@@ -1,5 +1,5 @@
 from database import TaskOrm, new_session
-from main import STaskAdd
+from schemas import STaskAdd
 from sqlalchemy import select
 
 
@@ -21,5 +21,5 @@ class TaskRepository:
     async with new_session() as session:
       query = select(TaskOrm)
       result = await session.execute(query)
-      task_model = result.scalars.all()
+      task_model = result.scalars().all()
       return task_model
